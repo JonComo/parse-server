@@ -131,10 +131,14 @@ export class UserController extends AdaptableController {
     }, {limit: 1}).then(results => {
       if (results.length != 1) {
         throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Could not find user with that email address.');
+      } else {
+        let priv = results[0];
+        _logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
+
+        this.config.database.update('_User', { objectId: priv['userId'] }, { email: email }, {}, true);
+        
+        return Promise.resolve(this.config.database.update('_User', { objectId: priv['userId'] }, { _perishable_token: randomString(25) }, {}, true));
       }
-      let priv = results[0];
-      _logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
-      return this.config.database.update('_User', { objectId: priv['userId'] }, { _perishable_token: randomString(25) }, {}, true);
     });
   }
 
