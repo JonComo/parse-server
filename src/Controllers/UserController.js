@@ -8,6 +8,7 @@ var RestWrite = require('../RestWrite');
 var RestQuery = require('../RestQuery');
 var hash = require('../password').hash;
 var Auth = require('../Auth');
+var _logger = require('../logger');
 
 export class UserController extends AdaptableController {
 
@@ -125,7 +126,8 @@ export class UserController extends AdaptableController {
   }
 
   setPasswordResetToken(email) {
-    let priv = this.config.database.find('Priv', {email: email});
+    let priv = this.config.database.find('Priv', {'email': email});
+    _logger.logger.info('found user with email ' + email + 'priv: ' + priv, null);
     return this.config.database.update('_User', { 'objectId': priv['userId'] }, { _perishable_token: randomString(25) }, {}, true)
   }
 
