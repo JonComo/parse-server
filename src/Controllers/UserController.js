@@ -126,10 +126,10 @@ export class UserController extends AdaptableController {
   }
 
   setPasswordResetToken(email) {
-    let priv = this.config.database.find('Priv', {'email': email});
+    let priv = this.config.database.find('Priv', {email: email});
     _logger.logger.info('found user with email ' + email + ' priv: ' + JSON.stringify(priv), null);
     if (priv && priv.length > 0) {
-      return this.config.database.update('_User', { 'objectId': priv[0]['userId'] }, { _perishable_token: randomString(25) }, {}, true)
+      return this.config.database.update('_User', { objectId: priv[0]['userId'] }, { _perishable_token: randomString(25) }, {}, true)
     } else {
       throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Priv or user object not found.');
     }
