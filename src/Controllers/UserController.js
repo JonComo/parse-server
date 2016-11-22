@@ -135,9 +135,9 @@ export class UserController extends AdaptableController {
         let priv = results[0];
         _logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
 
-        this.config.database.update('_User', { objectId: priv['userId'] }, { email: email }, {}, true);
-        
-        return Promise.resolve(this.config.database.update('_User', { objectId: priv['userId'] }, { _perishable_token: randomString(25) }, {}, true));
+        this.config.database.update('_User', { objectId: priv['userId'] }, { email: email }, {}, true).then(results => {
+          return this.config.database.update('_User', { objectId: priv['userId'] }, { _perishable_token: randomString(25) }, {}, true);
+        });
       }
     });
   }
