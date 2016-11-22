@@ -134,10 +134,7 @@ export class UserController extends AdaptableController {
       } else {
         let priv = results[0];
         _logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
-
-        this.config.database.update('_User', { objectId: priv['userId'] }, { email: email }, {}, true).then(results => {
-          return this.config.database.update('_User', { objectId: priv['userId'] }, { _perishable_token: randomString(25) }, {}, true);
-        });
+        return this.config.database.update('_User', { objectId: priv['userId'] }, { email: email, _perishable_token: randomString(25) }, {}, true);
       }
     });
   }
@@ -151,6 +148,8 @@ export class UserController extends AdaptableController {
 
     return this.setPasswordResetToken(email)
     .then(user => {
+      _logger.logger.info('got user: ' + JSON.stringify(user) + ' after setting token', null);
+      
       const token = encodeURIComponent(user._perishable_token);
       const username = encodeURIComponent(user.username);
       let link = `${this.config.requestResetPasswordURL}?token=${token}&username=${username}`
