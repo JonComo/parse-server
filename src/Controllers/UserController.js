@@ -126,7 +126,7 @@ export class UserController extends AdaptableController {
   }
 
   setPasswordResetToken(email) {
-    this.config.database.find('Priv', {
+    return this.config.database.find('Priv', {
       email: email,
     }, {limit: 1}).then(results => {
       if (results.length != 1) {
