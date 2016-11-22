@@ -178,7 +178,7 @@ export class UserController extends AdaptableController {
       _perishable_token: {__op: 'Delete'},
     }))
     .then(() => this.config.database.update('_User', { username }, {
-      email: {__op: 'Delete'}
+      email: ''
     }));
   }
 
