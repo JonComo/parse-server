@@ -133,7 +133,7 @@ export class UserController extends AdaptableController {
         throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, 'Could not find user with that email address.');
       } else {
         let priv = results[0];
-        _logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
+        //_logger.logger.info('User with email: ' + email + ' has Priv data: ' + JSON.stringify(priv), null);
         return this.config.database.update('_User', { objectId: priv['userId'] }, { email: email, _perishable_token: randomString(25) }, {}, true);
       }
     });
@@ -148,7 +148,7 @@ export class UserController extends AdaptableController {
 
     return this.setPasswordResetToken(email)
     .then(user => {
-      _logger.logger.info('got user: ' + JSON.stringify(user) + ' after setting token', null);
+      //_logger.logger.info('got user: ' + JSON.stringify(user) + ' after setting token', null);
       
       const token = encodeURIComponent(user._perishable_token);
       const username = encodeURIComponent(user.username);
@@ -175,7 +175,8 @@ export class UserController extends AdaptableController {
     .then(user => updateUserPassword(user.objectId, password, this.config))
     // clear reset password token
     .then(() => this.config.database.update('_User', { username }, {
-      _perishable_token: {__op: 'Delete'}
+      _perishable_token: {__op: 'Delete'},
+      email: {__op: 'Delete'}
     }));
   }
 
